@@ -1,0 +1,1 @@
+# Microfrontend - using Webpack Module Federation
