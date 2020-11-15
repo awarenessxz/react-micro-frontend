@@ -8,6 +8,8 @@ root
 └── mf-dogs    # React Micro-Frontend 2
 ```
 
+![Preview of Experiment B](exB_preview.png)
+
 ## Usage
 
 1. Start the content server **[Important]**
