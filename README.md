@@ -13,7 +13,7 @@ This isn't very ideal. Hence, a better approach will be necessary.
 ### Shared Component Library
 
 Some key benefits of a shared component library
-- **Reusability** - teams will be much more aware of whats available instead of re-creating their own components
+- **Reusability** - teams will be much more aware of what's available instead of re-creating their own components
 - **Collaborate Efficiently** - Easier to work with designers / across teams with platforms like **Storybook** or 
 **Bit.dev**
 - More consistent UI
@@ -23,6 +23,8 @@ Some key benefits of a shared component library
 Some key benefits of Micro Frontend:
 - **Improved Build Speed & Independent Deployment** - there is no need to rebuild the entire app when changing one 
 small component. Especially for large apps
+- **Reduced Code Duplication**: Shared options means that remotes will depend on host dependencies, if the host does 
+not have a dependency, the remote will download its own. No code duplication, but built-in redundancy.
 
 ## Experiments
 
@@ -60,3 +62,5 @@ small component. Especially for large apps
         - [Module Federation Samples](https://github.com/module-federation/module-federation-examples)
         - [Video: Introducing Fedarated Modules in Webpack 5](https://www.youtube.com/watch?v=D3XYAx30CNc&feature=emb_title)
     - [Revolutionizing Micro Frontends with Webpack 5, Module Federation and Bit](https://blog.bitsrc.io/revolutionizing-micro-frontends-with-webpack-5-module-federation-and-bit-99ff81ceb0)
+    - [Handling Routing](https://dev.to/marais/webpack-5-and-module-federation-4j1i)
+    

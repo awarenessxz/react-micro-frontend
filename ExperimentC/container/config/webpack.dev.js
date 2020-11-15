@@ -1,0 +1,35 @@
+const { HotModuleReplacementPlugin } = require("webpack");
+const { merge } = require("webpack-merge");
+const app = require('./wp-config');
+const util = require('./wp-config-util');
+const baseConfig = require('./webpack.common');
+
+module.exports = merge([
+    baseConfig,
+    {
+        mode: "development",
+        resolve: {
+            symlinks: false // for yarn link to work
+        },
+        output: {
+            devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
+        },
+        devServer: {
+            historyApiFallback: true,
+            stats: 'errors-only',
+            // turn on hot module replacement (HMR)
+            hot: true,
+            compress: true,
+            hotOnly: false,
+            open: true,
+            port: app.devServer.port,
+            overlay: {
+                errors: true,
+                warnings: true
+            }
+        },
+        plugins: [new HotModuleReplacementPlugin()]
+    },
+    util.generateSourceMap({ type: 'cheap-module-source-map' }),
+    util.loadCSS(false)
+]);
