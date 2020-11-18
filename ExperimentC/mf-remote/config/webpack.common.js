@@ -19,15 +19,18 @@ module.exports = merge([
         },
         plugins: [
             new ModuleFederationPlugin({
-                name: 'app_container',
-                library: { type: 'var', name: 'app_container' },
-                filename: 'remoteEntry.js',
-                remotes: {
-                    app_mf_bidirectional: 'app_mf_bidirectional',
-                    app_mf_remote: 'app_mf_remote'
+                name: "app_mf_remote",
+                library: { type: "var", name: "app_mf_remote" },
+                filename: "remoteEntry.js",
+                remotes: {},
+                exposes: {
+                    './AddItemToCartButton': `${app.paths.src}/components/AddItemToCartButton`,
+                    './CartButton': `${app.paths.src}/components/CartButton`,
+                    './CartContent': `${app.paths.src}/components/CartContent`,
+                    './reduxStore': `${app.paths.src}/redux/redux-store`,
+                    './reduxReducers': `${app.paths.src}/redux/root-reducer`
                 },
-                exposes: {},
-                shared: ['react', 'react-dom', 'react-router-dom', 'react-bootstrap', 'bootstrap']
+                shared: ['react', 'react-dom', 'react-router-dom', 'react-redux', 'redux-thunk', 'react-bootstrap', 'bootstrap']
             }),
             new HtmlWebpackPlugin({
                 title: app.title,

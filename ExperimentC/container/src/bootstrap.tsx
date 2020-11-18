@@ -1,15 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AppContainer as HotReloader } from 'react-hot-loader';
+import { Provider } from 'react-redux';
 import App from "./pages/App";
 import "./styles/app.scss";
 
+import store from './redux/redux-store';
+
+const reduxStore = store();
 const render = (AppComponent: React.FC): void => {
     ReactDOM.render(
-        <HotReloader>
+        <Provider store={reduxStore}>
             <AppComponent />
-        </HotReloader>,
-        document.getElementById('app'),
+        </Provider>,
+        document.getElementById('app')
     );
 };
 

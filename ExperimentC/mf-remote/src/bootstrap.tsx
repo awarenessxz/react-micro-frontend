@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import App from "./pages/App";
 import "./styles/app.scss";
 
-import store from "app_mf_remote/reduxStore";
+import store from './redux/redux-store';
 
 const reduxStore = store();
 const render = (AppComponent: React.FC): void => {
@@ -12,7 +12,7 @@ const render = (AppComponent: React.FC): void => {
         <Provider store={reduxStore}>
             <AppComponent/>
         </Provider>,
-        document.getElementById('app')
+        document.getElementById('app'),
     );
 };
 

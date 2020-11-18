@@ -7,30 +7,29 @@ const util = require('./wp-config-util');
 // common webpack configuration (used by both development and production config)
 module.exports = merge([
     {
-        entry: {
-            app: ['react-hot-loader/patch', app.paths.src]
-        },
+        entry: `${app.paths.src}/index.tsx`,
         resolve: {
             alias: {
-                'react-dom': '@hot-loader/react-dom',
                 path: 'path-browserify' // https://medium.com/@sanchit3b/how-to-polyfill-node-core-modules-in-webpack-5-905c1f5504a0
             },
-            extensions: ['.tsx', '.ts', ".js"]
+            extensions: ['.tsx', '.ts', '.js', '.json']
         },
         output: {
-            path: app.paths.build,
-            filename: '[name].js'
+            path: app.paths.build
         },
         plugins: [
             new ModuleFederationPlugin({
                 name: "app_mf_bidirectional",
                 library: { type: "var", name: "app_mf_bidirectional" },
                 filename: "remoteEntry.js",
-                remotes: {},
-                exposes: {
-                    AllCardsPage: './src/pages/AllCardsPage'
+                remotes: {
+                    app_mf_remote: 'app_mf_remote'
                 },
-                shared: ['react', 'react-dom', 'react-router-dom']
+                exposes: {
+                    './AllCardsPage': `${app.paths.src}/pages/AllCardsPage`,
+                    './Widget': `${app.paths.src}/components/Widget`
+                },
+                shared: ['react', 'react-dom', 'react-router-dom', 'react-redux', 'redux-thunk', 'react-bootstrap', 'bootstrap']
             }),
             new HtmlWebpackPlugin({
                 title: app.title,
@@ -42,10 +41,9 @@ module.exports = merge([
     },
     util.loadJavascript({
         include: [app.paths.src],
-        exclude: /node_modules/,
+        exclude: /node_modules/
     }),
     util.loadImages({
         include: [app.paths.assets]
-    }),
-    util.extractBundle()
+    })
 ]);

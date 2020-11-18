@@ -14,7 +14,6 @@ module.exports = merge([
         },
     },
     util.clean(app.paths.build),
-    util.minifyJS(),
     util.minifyCSS(),
     util.generateSourceMap({ type: 'source-map' }),
     util.loadCSS(true)

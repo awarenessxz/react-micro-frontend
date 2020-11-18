@@ -1,5 +1,7 @@
 import React from "react";
-import { Card, Button } from "react-bootstrap";
+import { Card } from "react-bootstrap";
+
+const AddToCartButton = React.lazy(() => import('app_mf_remote/AddItemToCartButton'));
 
 interface ContentCardProps {
     description: string;
@@ -19,9 +21,11 @@ const ContentCard = (props: ContentCardProps): JSX.Element => {
             <Card.Header>{props.contentId}</Card.Header>
             <Card.Body>
                 <Card.Text>{props.description}</Card.Text>
-                <Button variant="light" onClick={() => {
-                    console.log("Clicking ", props.contentId);
-                }}>Add to Card</Button>
+                <React.Suspense fallback={<div>Button Not Loaded...</div>}>
+                    <AddToCartButton item={{
+                        title: `${props.contentId}`
+                    }}/>
+                </React.Suspense>
             </Card.Body>
         </Card>
     )

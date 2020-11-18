@@ -2,8 +2,8 @@ const path = require('path');
 
 // contains configuration required for webpack to run
 module.exports = {
-    title: 'MF Bi',
-    publicPath: 'http://localhost:4001/',
+    title: 'MF Remote',
+    publicPath: 'http://localhost:4002/',
     paths: {
         // various sources and build paths
         src: path.join(__dirname, '../src'), // source path
@@ -12,8 +12,8 @@ module.exports = {
     },
     devServer: {
         // rapid development related / setting for webpack dev server (link between webpack and embedded tomcat in springboot)
-        port: 4001,
+        port: 4002,
         contextPath: '/frontend',
-        publicPath: 'http://0.0.0.0:4001/frontend'
+        publicPath: 'http://0.0.0.0:4002/frontend'
     }
 };

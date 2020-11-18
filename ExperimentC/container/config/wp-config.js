@@ -2,7 +2,7 @@ const path = require('path');
 
 // contains configuration required for webpack to run
 module.exports = {
-    title: 'React Frontend',
+    title: 'React Frontend Container',
     paths: {
         // various sources and build paths
         src: path.join(__dirname, '../src'), // source path

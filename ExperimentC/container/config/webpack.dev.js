@@ -1,4 +1,5 @@
-const { HotModuleReplacementPlugin } = require("webpack");
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { merge } = require("webpack-merge");
 const app = require('./wp-config');
 const util = require('./wp-config-util');
@@ -12,7 +13,8 @@ module.exports = merge([
             symlinks: false // for yarn link to work
         },
         output: {
-            devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
+            devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
+            publicPath: 'http://localhost:4000/'
         },
         devServer: {
             historyApiFallback: true,
@@ -20,7 +22,6 @@ module.exports = merge([
             // turn on hot module replacement (HMR)
             hot: true,
             compress: true,
-            hotOnly: false,
             open: true,
             port: app.devServer.port,
             overlay: {
@@ -28,7 +29,10 @@ module.exports = merge([
                 warnings: true
             }
         },
-        plugins: [new HotModuleReplacementPlugin()]
+        plugins: [
+            new ReactRefreshWebpackPlugin(),
+            new ForkTsCheckerWebpackPlugin()
+        ]
     },
     util.generateSourceMap({ type: 'cheap-module-source-map' }),
     util.loadCSS(false)

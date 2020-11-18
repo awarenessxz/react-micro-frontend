@@ -1,5 +1,4 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin'); // uses "uglify-js" to minify javascript files
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // extracts CSS into separate file (creates a css file epr js file which contains css)
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin'); // optimize and minimize css assets
 const autoprefixer = require('autoprefixer');
@@ -50,7 +49,8 @@ module.exports = {
             rules: [
                 {
                     test: /\.(ts|js)x?$/,
-                    exclude: /node_modules/,
+                    include,
+                    exclude,
                     loader: 'babel-loader',
                     options: {
                         cacheDirectory: true,
@@ -111,21 +111,6 @@ module.exports = {
             };
         }
     },
-    minifyJS: (noComment = true) => ({
-        optimization: {
-            minimizer: [
-                new UglifyJSPlugin({
-                    sourceMap: true,
-                    uglifyOptions: {
-                        warnings: false,
-                        output: {
-                            comments: !noComment
-                        }
-                    }
-                })
-            ]
-        }
-    }),
     minifyCSS: () => ({
         plugins: [
             new OptimizeCSSAssetsPlugin({
