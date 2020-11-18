@@ -1,16 +1,16 @@
 import { combineReducers, ReducersMapObject } from 'redux';
 
-export interface RootState {
-}
-
-export const reducersMap = {
+const reducersMap = {
 
 };
 
 // root reducer for redux
 export const createRootReducer = (asyncReducers?: ReducersMapObject) => {
-    return combineReducers<RootState>({
+    return combineReducers({
         ...reducersMap, // reducers belonging to container app
         ...asyncReducers // reducers loaded from other apps
     });
 };
+
+const rootReducer = createRootReducer();
+export type RootState = ReturnType<typeof rootReducer>;

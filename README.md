@@ -63,4 +63,4 @@ not have a dependency, the remote will download its own. No code duplication, bu
         - [Video: Introducing Fedarated Modules in Webpack 5](https://www.youtube.com/watch?v=D3XYAx30CNc&feature=emb_title)
     - [Revolutionizing Micro Frontends with Webpack 5, Module Federation and Bit](https://blog.bitsrc.io/revolutionizing-micro-frontends-with-webpack-5-module-federation-and-bit-99ff81ceb0)
     - [Handling Routing](https://dev.to/marais/webpack-5-and-module-federation-4j1i)
-    
+    - [Redux + Code Split + Typecheck](https://www.matthewgerstman.com/tech/redux-code-split-typecheck/)

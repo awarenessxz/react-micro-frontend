@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import { Store } from "redux";
+import { Store, Action } from "redux";
 import { Provider } from "react-redux";
-import { RootState, rootReducer } from "../redux/root-reducer";
+import { RootState, rootReducer, reducersMap } from "../redux/root-reducer";
 
+/*
 interface RemoteComponentWithReduxWrapperProps {
     store: Store<RootState>;
     component: React.ReactNode;
@@ -21,4 +22,12 @@ export const RemoteComponentWithReduxWrapper = (props: RemoteComponentWithReduxW
             { props.component }
         </Provider>
     );
+};
+ */
+
+export const injectRemoteReducerIntoStore = (store: Store<any, Action>) => {
+    for (const [key, value] of Object.entries(reducersMap)) {
+        // @ts-ignore
+        store.injectReducer(key, value);
+    }
 };

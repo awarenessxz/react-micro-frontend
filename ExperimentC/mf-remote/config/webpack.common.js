@@ -28,7 +28,7 @@ module.exports = merge([
                     './CartButton': `${app.paths.src}/components/CartButton`,
                     './CartContent': `${app.paths.src}/components/CartContent`,
                     './reduxStore': `${app.paths.src}/redux/redux-store`,
-                    './reduxReducers': `${app.paths.src}/redux/root-reducer`
+                    './reduxUtils': `${app.paths.src}/utils/mf-redux-util`
                 },
                 shared: ['react', 'react-dom', 'react-router-dom', 'react-redux', 'redux-thunk', 'react-bootstrap', 'bootstrap']
             }),
