@@ -13,6 +13,7 @@ const App = (): JSX.Element => {
             <Row>
                 <Col><AddItemToCartButton item={{ title: `New Item` }} /></Col>
             </Row>
+            <br />
             <Row>
                 <Col><CartContent /></Col>
             </Row>

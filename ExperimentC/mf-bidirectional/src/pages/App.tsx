@@ -10,6 +10,7 @@ const App = (): JSX.Element => {
             <Row>
                 <Col><AllCardsPage /></Col>
             </Row>
+            <br />
             <Row>
                 <Col>
                     <React.Suspense fallback={<div>Falling Back to Suspense...</div>}>

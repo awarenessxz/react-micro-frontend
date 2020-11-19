@@ -1,7 +1,8 @@
 import { combineReducers, ReducersMapObject } from 'redux';
+import appReducer from "./app/app-reducer";
 
 const reducersMap = {
-
+    app: appReducer
 };
 
 // root reducer for redux

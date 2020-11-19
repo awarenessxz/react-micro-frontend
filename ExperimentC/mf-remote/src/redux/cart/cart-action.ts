@@ -1,4 +1,5 @@
-import {CartItem, CartActionTypes, ADD_ITEM_TO_CART, AppThunkResult, REMOVE_ITEM_TO_CART} from "./cart-action.types";
+import { CartItem, CartActionTypes, ADD_ITEM_TO_CART, REMOVE_ITEM_TO_CART } from "./cart-action.types";
+import { AppThunkResult } from "../root-action";
 
 export const addItemToCart = (item: CartItem): CartActionTypes => ({
     type: ADD_ITEM_TO_CART,

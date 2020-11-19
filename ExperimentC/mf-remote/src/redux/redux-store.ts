@@ -3,8 +3,9 @@ import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk';
 import { RootState, rootReducer } from './root-reducer';
+import {RootActionType} from "./root-action";
 
-const configureProdStore = (initialState?: RootState): Store<RootState> => {
+const configureProdStore = (initialState?: RootState): Store<RootState, RootActionType> => {
     const middlewares = [
         // Add other middleware on this line...
         thunkMiddleware,
@@ -12,7 +13,7 @@ const configureProdStore = (initialState?: RootState): Store<RootState> => {
     return createStore(rootReducer, initialState, compose(applyMiddleware(...middlewares)));
 };
 
-const configureDevStore = (initialState?: RootState): Store<RootState> => {
+const configureDevStore = (initialState?: RootState): Store<RootState, RootActionType> => {
     const middlewares = [
         // Add other middleware on this line...
         reduxImmutableStateInvariant(), // redux middleware that spits an error on you when you try to mutate your state either inside a dispatch or between dispatches
