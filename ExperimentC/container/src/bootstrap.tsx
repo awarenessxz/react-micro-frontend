@@ -1,20 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
 import App from "./pages/App";
 import "./styles/app.scss";
 
 import store from './redux/redux-store';
-import { RemoteAppWrapper } from "app_mf_remote/reduxUtils";
+import { CombineReduxProvider } from "./utils/mf-util";
 
 const reduxStore = store();
 const render = (AppComponent: React.FC): void => {
     ReactDOM.render(
-        <Provider store={reduxStore}>
-            <RemoteAppWrapper store={reduxStore}>
-                <AppComponent />
-            </RemoteAppWrapper>
-        </Provider>,
+        <CombineReduxProvider store={reduxStore}>
+            <AppComponent />
+        </CombineReduxProvider>,
         document.getElementById('app')
     );
 };

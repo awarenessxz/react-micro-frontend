@@ -18,7 +18,7 @@ root
     - **static loading** -- loads remote components statically. Hence, if `mf-remote` is down, `mf-bidirection` will 
     be down as well
     - **routing** -- has its own routes. Implemented `react-router-dom` to demonstrate how to expose routing to consumer
-    - **state-management** -- no stage management, simply consumes `mf-remote` that has state-management.
+    - **state-management** -- **no stage management implemented**, simply consumes `mf-remote` that has state-management.
 - **mf-remote** -- provides remote components for `container` and `mf-remote`
     - **state-management** -- has its own state management. Implemented `redux` to demonstrate how to use redux
 

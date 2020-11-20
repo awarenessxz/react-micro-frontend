@@ -28,9 +28,9 @@ module.exports = merge([
                     './CartButton': `${app.paths.src}/components/CartButton`,
                     './CartContent': `${app.paths.src}/components/CartContent`,
                     './reduxStore': `${app.paths.src}/redux/redux-store`,
-                    './reduxUtils': `${app.paths.src}/utils/mf-redux-util`
+                    './reduxReducer': `${app.paths.src}/redux/root-reducer`
                 },
-                shared: ['react', 'react-dom', 'react-router-dom', 'react-redux', 'redux-thunk', 'react-bootstrap', 'bootstrap']
+                shared: [{ react: { 'singleton': true } }, 'react-dom', 'react-router-dom', 'react-redux', 'redux-thunk', 'react-bootstrap', 'bootstrap']
             }),
             new HtmlWebpackPlugin({
                 title: app.title,

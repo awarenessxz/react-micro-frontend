@@ -3,24 +3,33 @@
  *************************************************************************************** */
 
 export interface AppStateTypes {
-    title: string;
+    isMFBidirectionalLoaded: boolean;
+    isMFRemoteLoaded: boolean;
 }
 
 /* ***************************************************************************************
  * List of all action type
  *************************************************************************************** */
 
-export const SET_APP_TITLE = 'SET_APP_TITLE';
+export const SET_MF_BIDIRECTIONAL_LOAD_STATE = 'SET_MF_BIDIRECTIONAL_LOAD_STATE';
+export const SET_MF_REMOTE_LOAD_STATE = 'SET_MF_REMOTE_LOAD_STATE';
 
 /* ***************************************************************************************
  * Types Definition for all action type
  *************************************************************************************** */
 
-interface SetAppTitleAction {
-    type: typeof SET_APP_TITLE;
+interface SetMFBidirectionalLoadStateAction {
+    type: typeof SET_MF_BIDIRECTIONAL_LOAD_STATE;
     payload: {
-        title: string;
+        loadState: boolean;
     };
 }
 
-export type AppActionTypes = SetAppTitleAction;
+interface SetMFRemoteLoadStateAction {
+    type: typeof SET_MF_REMOTE_LOAD_STATE;
+    payload: {
+        loadState: boolean;
+    };
+}
+
+export type AppActionTypes = SetMFBidirectionalLoadStateAction | SetMFRemoteLoadStateAction;

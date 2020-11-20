@@ -26,10 +26,10 @@ module.exports = merge([
                     app_mf_remote: 'app_mf_remote'
                 },
                 exposes: {
-                    './AllCardsPage': `${app.paths.src}/pages/AllCardsPage2`,
+                    './AllCardsPage': `${app.paths.src}/pages/AllCardsPage`,
                     './Widget': `${app.paths.src}/components/Widget`
                 },
-                shared: ['react', 'react-dom', 'react-router-dom', 'react-redux', 'react-bootstrap', 'bootstrap']
+                shared: [{ react: { 'singleton': true } }, 'react-dom', 'react-router-dom', 'react-redux', 'react-bootstrap', 'bootstrap']
             }),
             new HtmlWebpackPlugin({
                 title: app.title,

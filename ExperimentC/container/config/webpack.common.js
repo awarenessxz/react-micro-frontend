@@ -27,7 +27,7 @@ module.exports = merge([
                     app_mf_remote: 'app_mf_remote'
                 },
                 exposes: {},
-                shared: ['react', 'react-dom', 'react-router-dom', 'react-bootstrap', 'bootstrap']
+                shared: [{ react: { 'singleton': true } }, 'react-dom', 'react-router-dom', 'react-redux', 'redux-thunk', 'react-bootstrap', 'bootstrap']
             }),
             new HtmlWebpackPlugin({
                 title: app.title,
