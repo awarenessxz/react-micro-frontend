@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { Nav, Navbar } from "react-bootstrap";
-import { RemoteMFComponent } from "../utils/mf-util";
+import { RemoteMFComponent } from "../utils/mf-react-util";
 
 const NavBar = (): JSX.Element => {
     return (

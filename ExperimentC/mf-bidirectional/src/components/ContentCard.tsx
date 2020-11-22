@@ -1,7 +1,6 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-
-const AddToCartButton = React.lazy(() => import('app_mf_remote/AddItemToCartButton'));
+import { RemoteMFComponent } from "../utils/mf-react-util";
 
 interface ContentCardProps {
     description: string;
@@ -21,11 +20,16 @@ const ContentCard = (props: ContentCardProps): JSX.Element => {
             <Card.Header>{props.contentId}</Card.Header>
             <Card.Body>
                 <Card.Text>{props.description}</Card.Text>
-                <React.Suspense fallback={<div>Button Not Loaded...</div>}>
-                    <AddToCartButton item={{
-                        title: `${props.contentId}`
-                    }}/>
-                </React.Suspense>
+                <RemoteMFComponent
+                    config={{
+                        scope: 'app_mf_remote',
+                        module: './AddItemToCartButton'}}
+                    componentProps={{
+                        item: {
+                            title: `${props.contentId}`
+                        }
+                    }}
+                />
             </Card.Body>
         </Card>
     )

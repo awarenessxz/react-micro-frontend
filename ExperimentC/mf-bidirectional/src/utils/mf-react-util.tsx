@@ -1,9 +1,39 @@
 // Codes from https://github.com/module-federation/module-federation-examples/blob/master/advanced-api/dynamic-remotes/app1/src/App.js
 import React, { Fragment, useEffect, useState } from "react";
 import { Store, Action, AnyAction, ReducersMapObject } from "redux";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import { setMFBidirectionLoadState, setMFRemoteLoadState } from "../redux/app/app-action";
-import { RootState } from "../redux/root-reducer";
+import { Provider } from "react-redux";
+
+/* ******************************************************************************************************************
+ * SessionStorage + Hooks
+ * https://www.youtube.com/watch?v=kQKs7o-X0zc&t=543s
+ * https://stackoverflow.com/questions/26974084/listen-for-changes-with-localstorage-on-the-same-window
+ * https://github.com/colshacol/storage-changed/blob/master/src/index.js
+ ****************************************************************************************************************** */
+
+const CUSTOM_SESSION_STORE_CHANGE_EVENT = 'storageChange';
+
+// using this to trigger a re-render for dynamic importing of components from remote
+const emitEvent = (key: string, value: string): void => {
+    const event = new CustomEvent(CUSTOM_SESSION_STORE_CHANGE_EVENT, {
+        detail: { key, value }
+    });
+    window.dispatchEvent(event);
+};
+
+export const useSessionState = (key: string, defaultValue?: string): [(string | null), (newValue: string) => void] => {
+    if (sessionStorage.getItem(key) === null && defaultValue) {
+        sessionStorage.setItem(key, defaultValue); // initializing
+    }
+    const [value, setValue] = useState(sessionStorage.getItem(key));
+
+    const setValueInStorage = (newValue: string): void => {
+        sessionStorage.setItem(key, newValue);
+        emitEvent(key, newValue);
+        setValue(newValue);
+    };
+
+    return [value, setValueInStorage];
+};
 
 /* ******************************************************************************************************************
  * Loading "remoteEntry.js" script from micro frontend dynamically
@@ -85,26 +115,26 @@ interface CombineReduxProviderProps<S, A extends Action = AnyAction> {
     children: React.ReactNode;
 }
 
-// created this so that we can useDispatch to update redux store
 const CombineReduxProviderInternals = <S, A extends Action>(props: CombineReduxProviderProps<S, A>): JSX.Element => {
     const mfBidirectionalResult = useDynamicScript('http://localhost:4001/remoteEntry.js');
     const mfRemoteLoadResult = useDynamicScript('http://localhost:4002/remoteEntry.js');
-    const dispatch = useDispatch();
+    const [mfBiSessionState, setMfBiSessionState] = useSessionState('app_mf_bidirectional', "false");
+    const [mfRemoteSessionState, setMfRemoteSessionState] = useSessionState('app_mf_remote', "false");
 
     // inject all reducers from this remote app into container store
     useEffect(() => {
         // handle mf_bidirectional
-        if (mfBidirectionalResult.ready) {
-            dispatch(setMFBidirectionLoadState(true));
+        if (mfBidirectionalResult.ready && mfBiSessionState === 'false') {
+            setMfBiSessionState('true');
         }
 
         // handle mf_remote
-        if (mfRemoteLoadResult.ready) {
+        if (mfRemoteLoadResult.ready && mfRemoteSessionState === 'false') {
             // inject reducers
             loadFunction('app_mf_remote', './reduxReducer')().then(fn => {
                 injectAllRemoteReducerIntoStore(props.store, fn.reducersMap);
             }).then(() => {
-                dispatch(setMFRemoteLoadState(true));
+                setMfRemoteSessionState('true');
             });
         }
     }, [mfBidirectionalResult, mfRemoteLoadResult]);
@@ -117,6 +147,7 @@ const CombineReduxProviderInternals = <S, A extends Action>(props: CombineReduxP
 };
 
 export const CombineReduxProvider = <S, A extends Action>(props: CombineReduxProviderProps<S, A>): JSX.Element => {
+    sessionStorage.clear(); // clear session
     return (
         <Provider store={props.store || {}}>
             <CombineReduxProviderInternals store={props.store} children={props.children} />
@@ -141,18 +172,30 @@ interface RemoteMFConfigProps {
 
 export const RemoteMFComponent = ({ config, componentProps, children }: RemoteMFConfigProps): JSX.Element => {
     const Component = React.lazy(loadFunction(config.scope, config.module));
-    const isScriptIsLoaded = (): boolean => {
-        switch(config.scope) {
-            case 'app_mf_bidirectional':
-                return useSelector((state: RootState) => state.app.isMFBidirectionalLoaded);
-            case 'app_mf_remote':
-                return useSelector((state: RootState) => state.app.isMFRemoteLoaded);
-            default:
-                return false;
-        }
+    const [isScriptReady, setIsScriptReady] = useState(sessionStorage.getItem(config.scope) === 'true');
+
+    const listenForStorageChange = (e: any) => {
+        console.log("listening", config.scope, config.module, sessionStorage.getItem(config.scope));
+        setIsScriptReady(sessionStorage.getItem(config.scope) === 'true');
     };
 
-    if (isScriptIsLoaded()) {
+    useEffect(() => {
+        if (isScriptReady) {
+            return;
+        }
+
+        console.log('adding session storage event listener');
+        window.addEventListener(CUSTOM_SESSION_STORE_CHANGE_EVENT, listenForStorageChange);
+
+        // clean up
+        return () => {
+            console.log('removing session storage event Listener:');
+            window.removeEventListener(CUSTOM_SESSION_STORE_CHANGE_EVENT, listenForStorageChange);
+        }
+
+    }, [isScriptReady]);
+
+    if (isScriptReady) {
         return (
             <React.Suspense fallback="Loading Remote Script">
                 <Component {...componentProps}>
@@ -161,6 +204,10 @@ export const RemoteMFComponent = ({ config, componentProps, children }: RemoteMF
             </React.Suspense>
         );
     } else {
-        return <div>Remote Component Not Found!</div>
+        return (
+            <div style={{ border: '1px solid black', textAlign: 'center', backgroundColor: '#FF9494', color: '#000000' }}>
+                Remote Component Not Found!
+            </div>
+        );
     }
 };

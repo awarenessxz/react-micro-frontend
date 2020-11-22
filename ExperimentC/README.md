@@ -47,15 +47,15 @@ root
             - `yarn install`
             - `yarn start`
         
-        3. Start the Container app **[Will not work without `mf-remote` running because `mf-bidirectional` depends 
-        on `mf-remote`]**
+        3. Start the Container app
             - `cd container`
             - `yarn install`
             - `yarn start`
             
     - Some Demo you can try
         - with all 3 application running, stop `mf-bidirectional` app, `container` app shouldn't crash.
-        - stop `mf-remote` and all the apps will crash. This is due to the fact that we are statically loading the 
-        micro frontend app from `index.html` at compile time. Refer to `container` app on how it dynamically loads the 
-        micro frontend apps.
+        - stop `mf-remote` and you will notice that `mf-bidirectional` will crashed while `mf-container` will not crash. 
+        This is due to the fact that we are statically loading the micro frontend app from `index.html` at compile time
+        for `mf-bidirectional`. while all components supplied to `mf-container` are loaded dynamically. Refer to 
+        `container` app on how it dynamically loads the micro frontend apps.
 

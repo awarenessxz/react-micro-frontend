@@ -8,6 +8,7 @@ import store from "app_mf_remote/reduxStore";
 
 const reduxStore = store();
 const render = (AppComponent: React.FC): void => {
+    sessionStorage.setItem('app_mf_remote', 'true'); // for dynamic loading purposes
     ReactDOM.render(
         <Provider store={reduxStore}>
             <AppComponent/>

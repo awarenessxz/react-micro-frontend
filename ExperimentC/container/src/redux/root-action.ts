@@ -1,6 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "./root-reducer";
-import {AppActionTypes} from "./app/app-action.types";
+import { AppActionTypes } from "./app/app-action.types";
 
 // consolidates all action types (typescript)
 export type RootActionType = AppActionTypes;

@@ -4,7 +4,7 @@ import App from "./pages/App";
 import "./styles/app.scss";
 
 import store from './redux/redux-store';
-import { CombineReduxProvider } from "./utils/mf-util";
+import { CombineReduxProvider } from "./utils/mf-react-util";
 
 const reduxStore = store();
 const render = (AppComponent: React.FC): void => {

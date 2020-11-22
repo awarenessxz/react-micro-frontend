@@ -3,33 +3,24 @@
  *************************************************************************************** */
 
 export interface AppStateTypes {
-    isMFBidirectionalLoaded: boolean;
-    isMFRemoteLoaded: boolean;
+    isSiteReady: boolean;
 }
 
 /* ***************************************************************************************
  * List of all action type
  *************************************************************************************** */
 
-export const SET_MF_BIDIRECTIONAL_LOAD_STATE = 'SET_MF_BIDIRECTIONAL_LOAD_STATE';
-export const SET_MF_REMOTE_LOAD_STATE = 'SET_MF_REMOTE_LOAD_STATE';
+export const SET_IS_SITE_READY = 'SET_IS_SITE_READY';
 
 /* ***************************************************************************************
  * Types Definition for all action type
  *************************************************************************************** */
 
-interface SetMFBidirectionalLoadStateAction {
-    type: typeof SET_MF_BIDIRECTIONAL_LOAD_STATE;
+interface SetIsSiteReadyAction {
+    type: typeof SET_IS_SITE_READY;
     payload: {
-        loadState: boolean;
+        isSiteReady: boolean;
     };
 }
 
-interface SetMFRemoteLoadStateAction {
-    type: typeof SET_MF_REMOTE_LOAD_STATE;
-    payload: {
-        loadState: boolean;
-    };
-}
-
-export type AppActionTypes = SetMFBidirectionalLoadStateAction | SetMFRemoteLoadStateAction;
+export type AppActionTypes = SetIsSiteReadyAction;

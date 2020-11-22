@@ -1,26 +1,15 @@
-import {
-    AppActionTypes,
-    AppStateTypes,
-    SET_MF_BIDIRECTIONAL_LOAD_STATE,
-    SET_MF_REMOTE_LOAD_STATE
-} from "./app-action.types";
+import { AppActionTypes, AppStateTypes, SET_IS_SITE_READY } from "./app-action.types";
 
 const initialState: AppStateTypes = {
-    isMFBidirectionalLoaded: false,
-    isMFRemoteLoaded: false
+    isSiteReady: false,
 };
 
 const appReducer = (state: AppStateTypes = initialState, action: AppActionTypes): AppStateTypes => {
     switch (action.type) {
-        case SET_MF_BIDIRECTIONAL_LOAD_STATE:
+        case SET_IS_SITE_READY:
             return {
                 ...state,
-                isMFBidirectionalLoaded: action.payload.loadState
-            };
-        case SET_MF_REMOTE_LOAD_STATE:
-            return {
-                ...state,
-                isMFRemoteLoaded: action.payload.loadState
+                isSiteReady: action.payload.isSiteReady
             };
         default:
             return state;
