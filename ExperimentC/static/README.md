@@ -1,5 +1,7 @@
 # Micro Frontend - using Webpack Module Federation
 
+This is an implementation of module federation using examples from [module-federation-examples](https://github.com/module-federation/module-federation-examples)
+
 ```
 root
 ├── container                # React Application that consumes the Micro-Fontends

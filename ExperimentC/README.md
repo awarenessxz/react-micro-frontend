@@ -11,6 +11,7 @@ root
 There is currently no best practises for implementing Micro Frontend. Refer to
 - [static folder](static) on how to implement basic module federation.
 - [dynamic folder](dynamic) on the workaround I tried to keep the main app (container) alive even when the MFE are dead.
+**Implementations details** can be found [below](#findings--implementations).
 
 ### Additional Context Note
 
