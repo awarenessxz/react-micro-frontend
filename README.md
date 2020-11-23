@@ -45,25 +45,8 @@ not have a dependency, the remote will download its own. No code duplication, bu
 3. **[Experiment C - Webpack + Module Federation](ExperimentC)**
     - Module Federation is a JavaScript architecture invented by Zack Jackson, who then proposes to create a Webpack 
     plugin for it. The Webpack team agrees, and they collaborated to bring the plugin into Webpack 5.
-    - **Findings**:
-        1. **De-couple Applications**
-            - Module Federation allows components to be loaded from other Remote Modules (AKA MFE) at run time. However, 
-            this is only possible if the `javascript (remoteEntry.js)` is available. This means that if any Remote 
-            Modules are dead, the entire app will be dead as the app is unable to find the components.
-            - **Workaround**
-                - Currently, there are no best practise to keep the main container app alive when the MFE that are 
-                supplying the components are dead.
-                - Instead, I tried to make use of `HTML 5 - sessionStorage & events` to make this happen. (might not be best...)
-                    1. App starts, Load `scripts` of other MFE.
-                    2. Once scripts are loaded, update `sessionStorage`.
-                    3. Remote Components will be listening to `sessionStorage` and load itself when the scripts have loaded.
-                - Some issues with this is that the codes are wrapped in wrapper codes which makes it hard to read...
-                Refer to `mf-react-util.tsx` to see how I load remote components and functions dynamically from sessionStorage.
-        2. **Typescript**
-            - There are some difficulties making full use of types when importing remote components...
-        3. **Redux**
-            - It might be best to implement isolated state management where each MFE have its own store.
-
+    - **Findings** -- Refer to [README](ExperimentC/README.md) for more details.
+    
 ## References
 - **React Custom Reusable Component Library**
     - [Creating a React Component Library using Rollup, Typescript, Sass and Storybook](https://blog.harveydelaney.com/creating-your-own-react-component-library/)

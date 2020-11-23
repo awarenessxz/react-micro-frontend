@@ -4,15 +4,11 @@ import { Container } from "react-bootstrap";
 import NavBar from "../components/NavBar";
 import HomePage from "./HomePage";
 import ViewCartPage from "./ViewCartPage";
-import { useRemoteFunction } from "../utils/mf-react-util";
+import remoteRoutes from 'app_mf_bidirectional/routes';
+
+const routes = [...remoteRoutes];
 
 const App = (): JSX.Element => {
-    let routes: RouteProps[] = [];
-    const remoteRoutes = useRemoteFunction({ mfScope: 'app_mf_bidirectional', mfModule: './routes', fnName: 'routes' });
-    if (remoteRoutes) {
-        routes = [...routes, ...remoteRoutes];
-    }
-
     return (
         <Container>
             <BrowserRouter>
