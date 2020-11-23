@@ -21,9 +21,8 @@ const ContentCard = (props: ContentCardProps): JSX.Element => {
             <Card.Body>
                 <Card.Text>{props.description}</Card.Text>
                 <RemoteMFComponent
-                    config={{
-                        scope: 'app_mf_remote',
-                        module: './AddItemToCartButton'}}
+                    mfScope='app_mf_remote'
+                    mfModule='./AddItemToCartButton'
                     componentProps={{
                         item: {
                             title: `${props.contentId}`

@@ -11,7 +11,7 @@ const NavBar = (): JSX.Element => {
                 <Nav.Link as={Link} to="/viewContent">Content</Nav.Link>
             </Nav>
             <Nav>
-                <RemoteMFComponent config={{ scope: 'app_mf_remote', module: './CartButton'}} componentProps={{ route: '/viewCart' }} />;
+                <RemoteMFComponent mfScope='app_mf_remote' mfModule='./CartButton' componentProps={{ route: '/viewCart' }}/>
             </Nav>
         </Navbar>
     );

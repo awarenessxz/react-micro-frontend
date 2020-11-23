@@ -4,6 +4,13 @@ import { Store, Action, AnyAction, ReducersMapObject } from "redux";
 import { Provider } from "react-redux";
 
 /* ******************************************************************************************************************
+ * Configurations
+ ****************************************************************************************************************** */
+
+
+
+
+/* ******************************************************************************************************************
  * SessionStorage + Hooks
  * https://www.youtube.com/watch?v=kQKs7o-X0zc&t=543s
  * https://stackoverflow.com/questions/26974084/listen-for-changes-with-localstorage-on-the-same-window
@@ -20,6 +27,7 @@ const emitEvent = (key: string, value: string): void => {
     window.dispatchEvent(event);
 };
 
+// hook for getting and setting item inside session storage
 export const useSessionState = (key: string, defaultValue?: string): [(string | null), (newValue: string) => void] => {
     if (sessionStorage.getItem(key) === null && defaultValue) {
         sessionStorage.setItem(key, defaultValue); // initializing
@@ -35,18 +43,46 @@ export const useSessionState = (key: string, defaultValue?: string): [(string | 
     return [value, setValueInStorage];
 };
 
+// hook for getting item in session store and listens for flag to turn true
+export const useSessionFlagState = (key: string, expectedTrueFlag: string = 'true'): boolean => {
+    const [flag, setFlag] = useState(sessionStorage.getItem(key) === expectedTrueFlag);
+
+    const listenForStorageChange = (e: any): void => {
+        console.log('storage change triggered for --> ', key);
+        setFlag(sessionStorage.getItem(key) === expectedTrueFlag);
+    };
+
+    useEffect(() => {
+        if (flag) {
+            return;
+        }
+
+        console.log('Add SessionStorage Event Listener for --> ', key);
+        window.addEventListener(CUSTOM_SESSION_STORE_CHANGE_EVENT, listenForStorageChange);
+
+        // clean up
+        return () => {
+            console.log('Remove SessionStorage Event Listener for --> ', key);
+            window.removeEventListener(CUSTOM_SESSION_STORE_CHANGE_EVENT, listenForStorageChange);
+        };
+    }, [flag]);
+
+
+    return flag;
+};
+
 /* ******************************************************************************************************************
  * Loading "remoteEntry.js" script from micro frontend dynamically
  * https://github.com/module-federation/module-federation-examples/blob/master/advanced-api/dynamic-remotes/app1/src/App.js
  ****************************************************************************************************************** */
 
-// @ts-ignore
-const loadFunction = (scope, module) => {
+const loadFunction = (scope: string, module: string) => {
     return async () => {
         // Initializes the share scope. This fills it with known provided modules from this build and all remotes
         // @ts-ignore
         await __webpack_init_sharing__("default");
 
+        // @ts-ignore
         const container = window[scope]; // or get the container somewhere else
         // Initialize the container, it may provide shared modules
         // @ts-ignore
@@ -147,7 +183,6 @@ const CombineReduxProviderInternals = <S, A extends Action>(props: CombineReduxP
 };
 
 export const CombineReduxProvider = <S, A extends Action>(props: CombineReduxProviderProps<S, A>): JSX.Element => {
-    console.log("RENDERING THIS");
     sessionStorage.clear(); // clear session
     return (
         <Provider store={props.store || {}}>
@@ -160,41 +195,21 @@ export const CombineReduxProvider = <S, A extends Action>(props: CombineReduxPro
  * Remote Component -- loads component dynamically
  ****************************************************************************************************************** */
 
-interface RemoteMFConfigProps {
-    config: {
-        scope: string; // eg. name of mf
-        module: string; // eg. ./Widget
-    };
+interface RemoteMFConfig {
+    mfScope: string; // name of mf
+    mfModule: string; // the exposed module, eg. ./Widget
+}
+
+interface RemoteMFComponentConfigProps extends RemoteMFConfig {
     componentProps?: {
         [key: string]: any
     };
     children?: React.ReactNode;
 }
 
-export const RemoteMFComponent = ({ config, componentProps, children }: RemoteMFConfigProps): JSX.Element => {
-    const Component = React.lazy(loadFunction(config.scope, config.module));
-    const [isScriptReady, setIsScriptReady] = useState(sessionStorage.getItem(config.scope) === 'true');
-
-    const listenForStorageChange = (e: any) => {
-        console.log("listening", config.scope, config.module, sessionStorage.getItem(config.scope));
-        setIsScriptReady(sessionStorage.getItem(config.scope) === 'true');
-    };
-
-    useEffect(() => {
-        if (isScriptReady) {
-            return;
-        }
-
-        console.log('adding session storage event listener');
-        window.addEventListener(CUSTOM_SESSION_STORE_CHANGE_EVENT, listenForStorageChange);
-
-        // clean up
-        return () => {
-            console.log('removing session storage event Listener:');
-            window.removeEventListener(CUSTOM_SESSION_STORE_CHANGE_EVENT, listenForStorageChange);
-        }
-
-    }, [isScriptReady]);
+export const RemoteMFComponent = ({ mfScope, mfModule, componentProps, children }: RemoteMFComponentConfigProps): JSX.Element => {
+    const Component = React.lazy(loadFunction(mfScope, mfModule));
+    const isScriptReady = useSessionFlagState(mfScope);
 
     if (isScriptReady) {
         return (
@@ -204,11 +219,51 @@ export const RemoteMFComponent = ({ config, componentProps, children }: RemoteMF
                 </Component>
             </React.Suspense>
         );
-    } else {
-        return (
-            <div style={{ border: '1px solid black', textAlign: 'center', backgroundColor: '#FF9494', color: '#000000' }}>
-                Remote Component Not Found!
-            </div>
-        );
     }
+
+    return (
+        <div style={{ border: '1px solid black', textAlign: 'center', backgroundColor: '#FF9494', color: '#000000' }}>
+            Remote Component Not Found!
+        </div>
+    );
+};
+
+/* ******************************************************************************************************************
+ * Remote Functions -- loads function dynamically
+ ****************************************************************************************************************** */
+
+interface useRemoteFunctionArgs extends RemoteMFConfig {
+    fnName: string;
+    fnArgs?: any[];
+}
+
+export const useRemoteFunction = ({ mfScope, mfModule, fnName, fnArgs }: useRemoteFunctionArgs): (any|undefined) => {
+    const isScriptReady = useSessionFlagState(mfScope);
+    const [remoteResult, setRemoteResult] = useState(undefined);
+
+    // ensure that remote script is loaded before extracting function
+    useEffect(() => {
+        console.log("Waiting for Remote Script to be loaded: ", isScriptReady);
+        if (isScriptReady) {
+            const remoteFunction = loadFunction(mfScope, mfModule);
+            console.log(remoteFunction);
+            if (remoteFunction !== undefined) {
+                remoteFunction().then(fn => {
+                    if (typeof fn === 'function') {
+                        const result = fn[fnName].apply(this, fnArgs);
+                        if (result) {
+                            setRemoteResult(result);
+                        }
+                    } else {
+                        const result = fn[fnName];
+                        if (result) {
+                            setRemoteResult(result);
+                        }
+                    }
+                });
+            }
+        }
+    }, [isScriptReady]);
+
+    return remoteResult;
 };

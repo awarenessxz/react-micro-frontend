@@ -18,7 +18,7 @@ Some key benefits of a shared component library
 **Bit.dev**
 - More consistent UI
 
-### Micro Frontend
+### Micro Frontend (MFE)
 
 Some key benefits of Micro Frontend:
 - **Improved Build Speed & Independent Deployment** - there is no need to rebuild the entire app when changing one 
@@ -29,7 +29,7 @@ not have a dependency, the remote will download its own. No code duplication, bu
 ## Experiments
 
 1. **[Experiment A - Component Library](ExperimentA)**
-    - Using a custom reusable React Component Library to share common components across projects
+    - Using a custom reusable React Component Library to share common components across projects.
 
 2. **[Experiment B - Cam Jackson Micro Frontend Framework](ExperimentB)**
     - This is based on the article published by Cam Jackson in end 2019 on his idea on how to implement Micro-frontend.
@@ -39,12 +39,30 @@ not have a dependency, the remote will download its own. No code duplication, bu
             build scripts. 
         2. `react-app-rewired` is also installed in the Micro Frontend Projects to prevent code-splitting. But this
         seems to be resolvable. Refer to this commit - [c06170a](https://github.com/awarenessxz/react-micro-frontend/commit/c06170a272c71d4e2fa877bb26fa347cb48d3597)    
-        3. As all our micro frontends and container will be hosted in different subdomains, we must enable CORS in all 
-        our micro frontends
+        3. As all our MFE and container will be hosted in different subdomains, we must enable CORS in all our MFE
+        4. **Sharing States** -- yet to explore the possibility...
 
 3. **[Experiment C - Webpack + Module Federation](ExperimentC)**
     - Module Federation is a JavaScript architecture invented by Zack Jackson, who then proposes to create a Webpack 
     plugin for it. The Webpack team agrees, and they collaborated to bring the plugin into Webpack 5.
+    - **Findings**:
+        1. **De-couple Applications**
+            - Module Federation allows components to be loaded from other Remote Modules (AKA MFE) at run time. However, 
+            this is only possible if the `javascript (remoteEntry.js)` is available. This means that if any Remote 
+            Modules are dead, the entire app will be dead as the app is unable to find the components.
+            - **Workaround**
+                - Currently, there are no best practise to keep the main container app alive when the MFE that are 
+                supplying the components are dead.
+                - Instead, I tried to make use of `HTML 5 - sessionStorage & events` to make this happen. (might not be best...)
+                    1. App starts, Load `scripts` of other MFE.
+                    2. Once scripts are loaded, update `sessionStorage`.
+                    3. Remote Components will be listening to `sessionStorage` and load itself when the scripts have loaded.
+                - Some issues with this is that the codes are wrapped in wrapper codes which makes it hard to read...
+                Refer to `mf-react-util.tsx` to see how I load remote components and functions dynamically from sessionStorage.
+        2. **Typescript**
+            - There are some difficulties making full use of types when importing remote components...
+        3. **Redux**
+            - It might be best to implement isolated state management where each MFE have its own store.
 
 ## References
 - **React Custom Reusable Component Library**

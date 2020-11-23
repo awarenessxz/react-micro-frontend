@@ -26,7 +26,7 @@ module.exports = merge([
                     app_mf_remote: 'app_mf_remote'
                 },
                 exposes: {
-                    './AllCardsPage': `${app.paths.src}/pages/AllCardsPage`,
+                    './routes': `${app.paths.src}/utils/routes`,
                     './Widget': `${app.paths.src}/components/Widget`
                 },
                 shared: [{ react: { 'singleton': true } }, 'react-dom', 'react-router-dom', 'react-redux', 'react-bootstrap', 'bootstrap']
