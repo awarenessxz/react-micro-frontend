@@ -28,7 +28,7 @@ root
 
 - **Test the Main App (Dynamic Loading + Redux + Routing)**
     - Things you can try:
-        - stop `mf-remote` or `mf-bidirectional` or both MFE. **`container` app will crash.
+        - stop `mf-remote` or `mf-bidirectional` or both MFE. `container` app will crash.
     
     - Start all the apps
         1. Start the remote app
