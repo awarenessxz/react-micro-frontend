@@ -23,8 +23,9 @@ Some key benefits of a shared component library
 Some key benefits of Micro Frontend:
 - **Improved Build Speed & Independent Deployment** - there is no need to rebuild the entire app when changing one 
 small component. Especially for large apps
-- **Reduced Code Duplication**: Shared options means that remotes will depend on host dependencies, if the host does 
-not have a dependency, the remote will download its own. No code duplication, but built-in redundancy.
+- **Reduced Code Duplication** - Basically the idea is that if both project uses dependencies like `lodash`, when the 
+host app loads the remote app, it will not download the dependency from the remote app, but instead use its own version. 
+This is possible because of the shared option by module federation. No code duplication, but built-in redundancy.
 
 ## Experiments
 
