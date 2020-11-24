@@ -6,13 +6,24 @@ root
 └── library    # React Custom Reusable Component Library
 ```
 
+## Overview
+
+### Main App (Container)
+
+![preview](exA_preview.png)
+
+### Storybook (Documentation + Playground)
+
+![storybook](exA_storybook.png)
+
+
 ## Usage
 
-- To view library itself
+- **To view library itself**
     - `cd library`
     - `yarn run storybook` --> platform to view components in library
 
-- To view library inside a React App
+- **To view library inside a React App**
     1. Build the library
         - `cd library` --> React Component Library
         - `yarn install`
