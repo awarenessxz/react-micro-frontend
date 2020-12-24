@@ -46,7 +46,7 @@ This is possible because of the shared option by module federation. No code dupl
 3. **[Experiment C - Webpack + Module Federation](ExperimentC)**
     - Module Federation is a JavaScript architecture invented by Zack Jackson, who then proposes to create a Webpack 
     plugin for it. The Webpack team agrees, and they collaborated to bring the plugin into Webpack 5.
-    - **Findings** -- Refer to [README](ExperimentC/README.md) for more details.
+    - **Findings** -- Refer to [README](ExperimentC/trial-1/README.md) for more details.
     
 ## References
 - **React Custom Reusable Component Library**
