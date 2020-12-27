@@ -2,7 +2,7 @@ const path = require('path');
 
 // contains configuration required for webpack to run
 module.exports = {
-    title: 'Purchase',
+    title: 'Product',
     paths: {
         // various sources and build paths
         src: path.join(__dirname, '../src'), // source path
@@ -11,8 +11,8 @@ module.exports = {
     },
     devServer: {
         // rapid development related / setting for webpack dev server (link between webpack and embedded tomcat in springboot)
-        port: 5003,
-        contextPath: '/purchase',
-        publicPath: 'http://0.0.0.0:5003/purchase'
+        port: 5002,
+        contextPath: '/product',
+        publicPath: 'http://0.0.0.0:5003/product'
     }
 };

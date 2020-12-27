@@ -7,7 +7,19 @@
  * Fixing some of the Elastic CSS Issues
  *********************************************************************************************************/
 
-body {
-  @include euiHeaderAffordForFixed;
+body.euiBody--headerIsFixed--double {
+  padding-top: 96px;
+}
+body.euiBody--headerIsFixed--double .euiFlyout, body.euiBody--headerIsFixed--double .euiCollapsibleNav {
+  top: 96px;
+  height: calc(100% - 96px);
 }
 
+//body {
+//  @include euiHeaderAffordForFixed;
+//}
+
+.mfProduct {
+  border: 5px dotted blue !important;
+  padding: 5px;
+}

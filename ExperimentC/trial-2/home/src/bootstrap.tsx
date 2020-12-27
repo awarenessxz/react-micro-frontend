@@ -1,22 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from "react-redux";
-import { Store, Action, AnyAction, ReducersMapObject } from "redux";
+import { Store, Action, AnyAction } from "redux";
 import App from "./pages/App";
 import "./styles/app.scss";
 import store from './redux/redux-store';
-//const remoteReducers = import('app_mf_remote/reduxReducer');
+import useRemoteReducers from "./utils/UseRemoteReducers";
 
 const reduxStore = store();
-const injectAllRemoteReducerIntoStore = <S, A extends Action>(store: Store<S, A>, reducersMap: ReducersMapObject<S, A>) => {
-    console.log('injecting...', store.getState());
-    for (const [key, value] of Object.entries(reducersMap)) {
-        console.log('injecting...', key, value);
-        // @ts-ignore
-        store.injectReducer(key, value);
-    }
-    console.log('injecting...', store.getState());
-};
 
 interface RemoteReduxWrapperProps<S, A extends Action = AnyAction> {
     store: Store<S, A>;
@@ -25,18 +16,27 @@ interface RemoteReduxWrapperProps<S, A extends Action = AnyAction> {
 
 const RemoteReduxWrapper = <S, A extends Action>(props: RemoteReduxWrapperProps<S, A>): JSX.Element => {
     const { store } = props;
-    /*React.useEffect(() => {
-        // @ts-ignore
-        remoteReducers.then(fn => {
-            injectAllRemoteReducerIntoStore(store, fn.reducersMap);
-        });
-    }, []);*/
+    const [isSiteReady, setIsSiteReady] = useState(false);
+    const isPurchaseAppReducerLoaded = useRemoteReducers("app_purchase/reduxReducer", store);
 
-    return (
-        <React.Fragment>
-            { props.children }
-        </React.Fragment>
-    );
+    useEffect(() => {
+        if (!isSiteReady) {
+            const isReduxReady = isPurchaseAppReducerLoaded;
+            if (isReduxReady) {
+                setIsSiteReady(true);
+            }
+        }
+    }, [isPurchaseAppReducerLoaded]);
+
+    if (isSiteReady) {
+        return (
+            <React.Fragment>
+                {props.children}
+            </React.Fragment>
+        );
+    }
+
+    return <div>Loading Site....</div>;
 };
 
 const render = (AppComponent: React.FC): void => {

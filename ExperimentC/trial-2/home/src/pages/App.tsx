@@ -1,30 +1,31 @@
-import React  from "react";
+import React from "react";
 import { BrowserRouter, Switch, Route, RouteProps } from "react-router-dom";
-import { Container } from "react-bootstrap";
-import NavBar from "../components/NavBar";
-import HomePage from "./HomePage";
+import "../styles/app.scss";
 
-// const routes = [...remoteRoutes];
-const routes: RouteProps[] = [];
+import { routes as localRoutes } from "../utils/routes";
+import AppHeader from "../components/AppHeader";
+import useRemoteRoutes from "../utils/UseRemoteRoutes";
+import PageNotFound from "./PageNotFound";
 
 const App = (): JSX.Element => {
+    const remoteProductAppRoutes = useRemoteRoutes("app_product/routes");
+    const remotePurchaseAppRoutes = useRemoteRoutes("app_purchase/routes");
+    const routes: RouteProps[] = [...localRoutes, ...remoteProductAppRoutes, ...remotePurchaseAppRoutes];
+
+    console.log(routes.length);
+
     return (
-        <Container>
-            <BrowserRouter>
-                <React.Fragment>
-                    <NavBar />
-                    <br />
-                    <React.Suspense fallback={<div>Loading remote routes...</div>}>
-                        <Switch>
-                            <Route exact path="/" component={HomePage} />
-                            {routes.map((route, idx) => (
-                                <Route key={idx} path={route.path} component={route.component} exact={route.exact}/>
-                            ))}
-                        </Switch>
-                    </React.Suspense>
-                </React.Fragment>
-            </BrowserRouter>
-        </Container>
+        <BrowserRouter>
+            <AppHeader />
+            <React.Suspense fallback={<div>Loading remote routes...</div>}>
+                <Switch>
+                    {routes.map((route, idx) => (
+                        <Route key={idx} path={route.path} component={route.component} exact={route.exact}/>
+                    ))}
+                    <Route component={PageNotFound} />
+                </Switch>
+            </React.Suspense>
+        </BrowserRouter>
     )
 };
 

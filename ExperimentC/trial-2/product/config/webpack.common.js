@@ -19,15 +19,15 @@ module.exports = merge([
         },
         plugins: [
             new ModuleFederationPlugin({
-                name: 'app_home',
-                library: { type: 'var', name: 'app_home' },
+                name: 'app_product',
+                library: { type: 'var', name: 'app_product' },
                 filename: 'remoteEntry.js',
                 remotes: {
-                    app_product: 'app_product',
-                    app_purchase: 'app_purchase',
+                    app_home: 'app_home',
+                    app_purchase: 'app_purchase'
                 },
                 exposes: {
-                    './Shell': `${app.paths.src}/pages/App`,
+                    './routes': `${app.paths.src}/utils/routes`,
                 },
                 shared: [{ react: { 'singleton': true } }, 'react-dom', 'react-router-dom', 'react-redux', 'redux-thunk', '@elastic/eui', '@elastic/datemath']
             }),

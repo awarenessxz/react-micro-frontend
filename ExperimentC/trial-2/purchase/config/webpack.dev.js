@@ -14,7 +14,7 @@ module.exports = merge([
         },
         output: {
             devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
-            publicPath: 'http://localhost:4000/'
+            publicPath: 'http://localhost:5003/'
         },
         devServer: {
             historyApiFallback: true,
@@ -23,6 +23,7 @@ module.exports = merge([
             hot: true,
             compress: true,
             open: true,
+            openPage: 'purchaseTeam',
             port: app.devServer.port,
             overlay: {
                 errors: true,
@@ -30,7 +31,9 @@ module.exports = merge([
             }
         },
         plugins: [
-            new ReactRefreshWebpackPlugin(),
+            new ReactRefreshWebpackPlugin({
+                overlay: false, // disable error overlay for hot reload
+            }),
             new ForkTsCheckerWebpackPlugin()
         ]
     },

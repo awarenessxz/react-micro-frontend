@@ -14,7 +14,7 @@ module.exports = merge([
         },
         output: {
             devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
-            publicPath: 'http://localhost:5001/'
+            publicPath: 'http://localhost:5002/'
         },
         devServer: {
             historyApiFallback: true,
@@ -23,6 +23,7 @@ module.exports = merge([
             hot: true,
             compress: true,
             open: true,
+            openPage: 'productTeam',
             port: app.devServer.port,
             overlay: {
                 errors: true,

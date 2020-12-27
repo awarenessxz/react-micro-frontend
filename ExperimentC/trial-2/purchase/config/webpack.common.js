@@ -22,9 +22,17 @@ module.exports = merge([
                 name: 'app_purchase',
                 library: { type: 'var', name: 'app_purchase' },
                 filename: 'remoteEntry.js',
-                remotes: {},
-                exposes: {},
-                shared: [{ react: { 'singleton': true } }, 'react-dom', 'react-router-dom', 'react-redux', 'redux-thunk', 'react-bootstrap', 'bootstrap']
+                remotes: {
+                    app_home: 'app_home'
+                },
+                exposes: {
+                    './routes': `${app.paths.src}/utils/routes`,
+                    './AddItemToCartButton': `${app.paths.src}/components/AddItemToCartButton`,
+                    './CartButton': `${app.paths.src}/components/CartButton`,
+                    './reduxStore': `${app.paths.src}/redux/redux-store`,
+                    './reduxReducer': `${app.paths.src}/redux/root-reducer`
+                },
+                shared: [{ react: { 'singleton': true } }, 'react-dom', 'react-router-dom', 'react-redux', 'redux-thunk']
             }),
             new HtmlWebpackPlugin({
                 title: app.title,
